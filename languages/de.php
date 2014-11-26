@@ -1,0 +1,52 @@
+<?php
+
+$plugin_tx['gxsecurity']['mnu_main']="GXSecurity Daten";
+$plugin_tx['gxsecurity']['mnu_css']="Stylesheet-Einstellungen";
+$plugin_tx['gxsecurity']['mnu_config']="Konfiguration";
+$plugin_tx['gxsecurity']['mnu_language']="Spracheinstellungen";
+$plugin_tx['gxsecurity']['mnu_help']="Hilfe";
+$plugin_tx['gxsecurity']['mnu_country_file']="Länderdatei";
+$plugin_tx['gxsecurity']['mnu_crack_file']="Datei mit Crack-Ausdrücken";
+$plugin_tx['gxsecurity']['access_denied']="Zugriff verboten";
+$plugin_tx['gxsecurity']['contact_admin']="Für weitere Informationen kontaktieren Sie ggf. den Webmaster.";
+$plugin_tx['gxsecurity']['cookies_disabled']="Cookies müssen für diese Website akzeptiert werden. Bitte nehmen Sie diese Einstellung vor, bevor erneut versucht wird, auf die Seite zuzugreifen. Ansonsten kommt es zu einer Sperrung dieser IP.";
+$plugin_tx['gxsecurity']['country_banned']="Der Zugriff auf die Website ist von diesem Land aus gesperrt.";
+$plugin_tx['gxsecurity']['ip_blacklisted']="Diese IP steht auf einer schwarzen Liste.";
+$plugin_tx['gxsecurity']['rapid_request']="Von dieser IP kamen zu viele schnelle Zugriffe. Bitte warten Sie ein wenig bevor Sie wieder auf die Seite zugreifen.";
+$plugin_tx['gxsecurity']['server_busy']="Der Server ist momentan zu ausgelastet um Ihre Anfrage zu bearbeiten. Wir bitten um Ihr Verständnis.";
+$plugin_tx['gxsecurity']['enable_javascript']="Javascript muss akzeptiert werden um diese Website anzuzeigen.";
+$plugin_tx['gxsecurity']['multipost']="Sie dürfen nicht mehrere POST Operationen in Abfolge machen. Bitte kehren Sie zur Website zurück und versuchen Sie es erneut.";
+$plugin_tx['gxsecurity']['secdata_post']="Ihr Browser sendete nicht die korrekten Sicherheitsdaten um die POST Operation durchzuführen. Stellen Sie sicher dass Cookies akzeptiert werden und versuchen Sie es erneut. Wenn Sie glauben, dass es sich bei dieser Mitteilung um einen Fehler handelt, kontaktieren Sie den Webmaster.";
+$plugin_tx['gxsecurity']['secdata_get']="Ihr Browser sendete nicht die korrekten Sicherheitsdaten um die GET Operation durchzuführen. Stellen Sie sicher dass Cookies akzeptiert werden und versuchen Sie es erneut. Wenn Sie glauben, dass es sich bei dieser Mitteilung um einen Fehler handelt, kontaktieren Sie den Webmaster.";
+$plugin_tx['gxsecurity']['attack_detected']="Es wurde ein Angriff auf die Website erkannt und blockiert.";
+$plugin_tx['gxsecurity']['show_log']="Log-Datei in neuem Fenster anzeigen";
+$plugin_tx['gxsecurity']['cf_usehtaccessbans']="1 = .htaccess verändern um IPs zu sperren, 0 = IPs nicht sperren";
+$plugin_tx['gxsecurity']['cf_filterGETvars']="1 = HTML Tags in GET Variablen säubern, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_filterCOOKIEvars']="1 = 1 = HTML Tags in COOKIE Variablen säubern, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_filterPOSTvars']="1 = 1 = HTML Tags in POST Variablen säubern, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_extraPOSTprotection']="1 = zusätzlichen POST-Schutz benutzen, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_extraGETprotection']="1 = zusätzlichen GET-Schutz benutzen, 0 = nicht (nicht angeraten!)";
+$plugin_tx['gxsecurity']['cf_checkmultiPOST']="1 = nur die Anzahl von maxmultiPOST sich folgenden POSTs erlauben, 0 = nicht drum kümmern";
+$plugin_tx['gxsecurity']['cf_maxmultiPOST']="maximale Anzahl von sich folgenden POSTs, wenn checkmultipost aktiviert ist";
+$plugin_tx['gxsecurity']['cf_zipcompress']="1 = Seiten mittels der GZIP Bibliothek komprimieren (niedrigere Bandbreite, höhere CPU-Last, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_compresslevel']="Komprimierungs-Lever für zipcompress, von 1 (niedrig) bis 9 (Maximum), 1 = Zugriff blockieren wenn eine gewisse Systemlast erreicht ist, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_cpumaxload']="maximum 5 Minuten mittlere Systemlast bevor der Zugriff blockiert wird";
+$plugin_tx['gxsecurity']['cf_gxsessionpath']="wenn nicht leer, bezeichnet einen Ordner um die Sitzungsdateien zu speichern";
+$plugin_tx['gxsecurity']['cf_filterblacklistedIPs']="1 = IPs von schwarzen Listen sperren, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_dnsbl_lists']="DNS-based Blackhole List";
+$plugin_tx['gxsecurity']['cf_filtercountries']="1 = Länder aus countryfile sperren, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_crackcheck']="1 = auf Cracks und Injektionen testen, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_countryfile']="Name der Datei mit den zu sperrenden Länderkodes";
+$plugin_tx['gxsecurity']['cf_crackfile']="Name der Datei mit den aufzuspürenden Cracks und Injektionen";
+$plugin_tx['gxsecurity']['cf_badattempts']="Anzahl der unerlaubten Zugriffe bevor die IP in .htaccess gesperrt wird oder eine Mitteilung kommt, dass zu viele schnell aufeinander folgende Zugriffe gewesen sind.";
+$plugin_tx['gxsecurity']['cf_logheader']="Kopfzeile der Logfiles";
+$plugin_tx['gxsecurity']['cf_logcycle']="Zyklus der Logdateien: <D>aily (eine Datei pro Tag), <M>onthly (eine Datei pro Monat) oder <Y>early (eine Datei pro Jahr)";
+$plugin_tx['gxsecurity']['cf_logdelimiter']="Trenner zwischen den Feldern in den Logdateien";
+$plugin_tx['gxsecurity']['cf_httpBL_key']="Persönlicher http:BL Zugriffskode vom Projekt Honey Pot., Wenn die Variable leer ist, dann wird der Test übersprungen.";
+$plugin_tx['gxsecurity']['cf_httpBL_spamthreat']="Schwellenwert der Spambedrohung (default = 1), Detaillierte Infos siehe http://www.projecthoneypot.org/httpbl_api.php";
+$plugin_tx['gxsecurity']['cf_httpBL_otherthreat']="Schwellenwert anderer Bedrohungen (default = 40), Detaillierte Infos siehe http://www.projecthoneypot.org/httpbl_api.php";
+$plugin_tx['gxsecurity']['cf_checkbothost']="1 = Host bei Robots (user agent) gegentesten, 0 = nicht";
+$plugin_tx['gxsecurity']['cf_checkhosttype']="1 = Standard (gethostbyaddr()), 2 = *nix (schneller als 1), 3 = Win (schneller als 1)";
+$plugin_tx['gxsecurity']['cf_waitingtime']="Zeit in Sekunden, bevor nach einer Sperrung ein neuer Zugriff erlaubt wird";
+
+?>

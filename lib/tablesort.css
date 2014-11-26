@@ -1,0 +1,14 @@
+body {
+	margin:10px;
+}
+table {
+	font-family:verdana;
+	font-size:9pt;
+	border:1px solid #000000;
+	cursor:default;
+	color:#FFFFFF;
+}
+
+td {
+	padding:5px;
+}

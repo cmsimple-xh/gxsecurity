@@ -1,0 +1,215 @@
+<html>
+<head>
+<title>GX Website Security plugin for CMSimple</title>
+</head>
+<body>
+<p><strong><u>Qu'est-ce que le plugin GX Website Security pour CMSimple?</u></strong></p>
+<p>Le plugin GX Website Security est un script conçu pour prendre en charge certains problèmes de sécurité communs aux scripts PHP.</p>
+<p>Il est construit pour apporter une protection immédiate et transparente de diverses façons. On a toujours entendu parlé des scripts présentant des failles de sécurité dues à ceux qui les ont écrit sans assez de précautions.  Ce plugin est conçu pour tenter de compenser ce manque de précaution.</p>
+<p>A l'origine il est basé sur le script Cafe CounterIntelligence PHP Website Security de Mike Parniak.</p>
+<p>C'est un plugin pour le C.M.S. <a href="http://www.cmsimple.org">CMSimple</a>.</p>
+<br>
+<p><strong><u>Contre quoi le plugin GX Website Security peut-il protéger ?</strong></u></p>
+<p><strong>Débordement de requêtes HTTP</strong></p>
+
+<p>A l'origine le script a été créé pour lutter contre ce type d'attaque.</p>
+<p>Des programmes peuvent être crées pour innonder votre site web de requêtes GET ou POST, pour saturer le CPU, générer des milliers d'emails, remplir des bases de données ou autres choses.  Très peu de scripts sont conçus pour contrer ce type d'attaque et les hébergeurs commerciaux peuvent résilier votre compte si vous en êtes victime (c'est leur serveur qui est saturé !). Ce plugin peut aider à contrer ce type d'attaque.</p>
+<p><strong>Vulnérabilités d'affichage de script</strong></p>
+<p>De loin la faille la plus courante des scripts PHP.</p>
+<p>Des utilisateurs trouvent une variable CGI qui sera affichée intégralement, et la passent à travers du code HTML (généralement du code javascript) qui enverra un cookie utilisateur ou autre à leur serveur.  Ils utilisent cette information pour voler un login ou pire.  Le script GX a la possibilité de "nettoyer" les données GET, POST et COOKIE et de convertir les caractères HTML en codes non exécutables par le serveur.  Ceci annule généralement le danger de ce type de faille.</p>
+<p><strong>Protection contre le débordement général</strong></p>
+<p>Une possibilité supplémentaire du script est d'effectuer un test basé sur le temps contre le débordement d'une fonction particulière.  Ca signifie que vous lui passez un identifiant unique et une valeur de temps, et éventuellement un nombre limite. La fonction vérifiera si elle a été appelée le nombre limite de fois par le même utilisateur en dehors de l'intervalle de temps fixé.</p>
+
+<p><strong>Bannissement d'IP par .htaccess</strong></p>
+<p>En option (définie par défaut) ce sript peut modifier votre fichier .htaccess pour bannir les adresses IP des utilisateurs qui abusent de votre site web.  Ca réduira drastiquement la surcharge CPU due à leurs tentatives et empêche leurs prochaines.</p>
+<p>Pour fonctionner le script doit pouvoir accéder en écriture au fichier .htaccess, s'il existe.</p>
+<p><strong>Aperçu/vol du source HTML</strong></p>
+<p>Le script peu automatiquement enrober les pages dans une fonction JavaScript qui utilise une technique de dissimulation, ou avec la propre méthode de GXSecurity qui rend impossible l'accès au source à partir des données transmises.  La clé d'encryption est stockée dans un cookie qui change à chaque requête, alors à moins de récupérer chaque clé en même temps que les données, la décryption est impossible a fortiori !</p>  
+<p><strong>Blocage d'adresses IP en liste noire (RBL)</strong></p>
+<p>Le script peut automatiquement identifier des adresses IP blacklistées comme spammeurs connus et les empêcher d'accéder au site et de tenter de le pirater.</p>
+<p><strong>Blocage de visiteurs par origine</strong></p>
+<p>Votre site est souvent visité par des utilisateurs résidant dans des pays d'où des pirates ou des robots de spam opèrent.</p>
+<p>Ce script vous donne la possibilité de bannir individuellement les visiteurs provenant de ces pays.</p>
+<p><strong>Détection de crack et d'injection d'URL</strong></p>
+<p>Le script peut automatiquement détecter les attaques par crack et injection d'URL.</p>
+<br>
+<p><strong><u>Comment dois-je utiliser ce plugin ?<p></strong></u>
+<p><strong>Installer GXSecurity</strong></p>
+<p>Copier simplement le plugin dans le dossier Plugins de CMSimple - C'est fait !!!</p>
+<p>Ok, pour éditer ou enregistrer des paramètres il est nécessaire (sur certains serveurs) de "chmoder" des dossiers et des fichiers. Dans le dossier du plugin, vous avez 5 dossiers - config, css, languages, log et lib - qui doivent avoir tous les droits d'accès (chmod 777). Même chose pour leurs fichiers.</p>
+<p>De plus vous devez initialiser le plugin dans votre template. Ajouter simplement la ligne suivante au tout début de votre fichier template.htm :</p>
+<p>&lt;?php echo GXSecurity();?&gt;</p>
+<p>resp. si il y a des problèmes en mode administrateur:</p>
+<p>&lt;?php if (!$adm) echo GXSecurity();?&gt;</p>
+<p><strong>Configurer GXSecurity</strong></p>
+<p>Il y a un lot de variables de configuration que vous devez définir et choisir selon vos besoins.</p>
+<table style="text-align: left; width: 100%;" border="1"  cellpadding="2" cellspacing="2">
+<tr>
+<td style="text-align: center;"><strong>Variable</strong></td>
+<td style="text-align: center;"><strong>Valeur</strong></td>
+</tr>
+<tr>
+<td>usehtaccessbans</td>
+<td>1 = modifier le fichier .htaccess pour bannir des IPs<br>
+0 = ne pas bannir d'IPs</td>
+</tr>
+<tr>
+<td>filterGETvars</td>
+<td>1 = nettoyer les tags HTML dans les variables GET<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>filterCOOKIEvars</td>
+<td>1 = nettoyer les tags HTML dans les variables COOKIES<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>filterPOSTvars</td>
+<td>1 = nettoyer les tags HTML dans les variables POST<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>extraPOSTprotection</td>
+<td>1 = utiliser la protection extra POST<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>extraGETprotection</td>
+<td>1 = utiliser la protection extra GET<br>
+0 = ne pas le faire (non recommandé !)</td>
+</tr>
+<tr>
+<td>checkmultiPOST</td>
+<td>1 = autoriser seulement un nombre "maxmultiPOST" de POST successifs<br>
+0 = sans limite</td>
+</tr>
+<tr>
+<td>maxmultiPOST</td>
+<td>Nombre maximal d'opérations POST par file, si "checkmultiPOST" est activé</td>
+</tr>
+<tr>
+<td>zipcompress</td>
+<td>1 = compression des pages avec la librairie PHP GZIP(diminution de la bande passante mais augmentation de l'occupation CPU)<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>compresslevel</td>
+<td>Niveau de compression GZIP, de 1 (faible) à 9 (maximum)</td>
+</tr>
+<tr>
+<td>cpuloadmonitor</td>
+<td>1 = bloque l'accès au dessus d'une certaine charge du système<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>cpumaxload</td>
+<td>5 minutes maximum de charge moyenne avant de bloquer l'accès</td>
+</tr>
+<tr>
+<td>gxsessionpath</td>
+<td>si n'est pas vide, défini un chemin pour stocker les fichiers de session</td>
+</tr>
+<tr>
+<td>filterblacklistedIPs</td>
+<td>1 = filtrer les IPs blacklistées<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>dnsbl_lists</td>
+<td>DNS-based Blackhole List</td>
+</tr>
+<tr>
+<td>filtercountries</td>
+<td>1 = filtrer les pays d'après le fichier pays<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>crackcheck</td>
+<td>1 = vérifier les cracks et injections<br>
+0 = ne pas le faire</td>
+</tr>
+<tr>
+<td>countryfile</td>
+<td>nom du fichier contenant les pays à bloquer</td>
+</tr>
+<tr>
+<td>crackfile</td>
+<td>nom du fichier contenant les codes de cracks ou d'injections à détecter</td>
+</tr>
+<tr>
+<td>badattempts</td>
+<td>nombre de mauvaises tentatives avant de bannir l'IP dans le fichier .htaccess ou d'avertir que des accès trop rapides ont eu lieu</td>
+</tr>
+<tr>
+<td>logheader</td>
+<td>Entête des fichiers log</td>
+</tr>
+<tr>
+<td>logcycle</td>
+<td>Cycle des fichiers log: &lt;D&gt;aily (un fichier par jour), &lt;M&gt;onthly (un fichier par mois) ou &lt;Y&gt;early (un fichier par année)</td>
+</tr>
+<tr>
+<td>logdelimiter</td>
+<td>Séparateur entre les champs dans les fichiers log</td>
+</tr>
+<tr>
+<td>httpBL_key</td>
+<td><a href="http://www.projecthoneypot.org/httpbl_configure.php">Code d'accès http:BL</a> personnel du <a href="http://www.projecthoneypot.org/">Projet Honey Pot</a>.<br>Si la variable est vide, le test est passé.</td>
+</tr>
+<tr>
+<td>httpBL_spamthreat</td>
+<td>Valeur de seuil pour des menaces de spammers (défault = 1)<br>
+Informations détaillées voir <a href="http://www.projecthoneypot.org/httpbl_api.php">http://www.projecthoneypot.org/httpbl_api.php</a>
+</td>
+</tr>
+<tr>
+<td>httpBL_otherthreat</td>
+<td>Valeur de seuil pour d'autres menaces (défault = 40)<br>
+Informations détaillées voir <a href="http://www.projecthoneypot.org/httpbl_api.php">http://www.projecthoneypot.org/httpbl_api.php</a>
+</td>
+</tr>
+<tr>
+<td>checkbothost</td>
+<td>1 = Vérifier le host pour des robots (user agent)<br>
+0 = ne pas le faire
+</td>
+</tr>
+<tr>
+<td>checkhosttype</td>
+<td>1 = Standard (gethostbyaddr())<br>
+2 = *nix (plus rapide que 1)<br>
+3 = Win (plus rapide que 1)
+</td>
+</tr>
+<tr>
+<td>waitingtime</td>
+<td>Temps en secondes qu'il faut attendre avant qu'un nouveau acces soit possible après un bloquage</td>
+</tr>
+</table>
+<p>Certaines options sollicitant le CPU ou pouvant causer problème ont été désactivées par défaut.  Des essais approfondis de bon fonctionnement sont nécessaires pour définir les meilleures options pour votre site.</p>
+<p><strong>Attention: encodage GZIP / encryption HTML</strong></p>
+<p>Si vous voulez utiliser ces options avec GXSecurity, vous devez vous assurer que votre serveur n'utilise pas déjà la compression GZIP.  Si c'est le cas <strong>désactivez le dans votre script</strong> et activez le dans GXSecurity.  Vous ne pouvez pas utiliser l'encryption HTML si vous utilisez le buffer gzip de votre propre script parce que le buffer gzip nécessite d'être placé avant le buffer d'encryption.  GXSecurity s'assure que l'utilisateur peut accepter l'encodage gzip avant de s'en servir, n'hésitez pas à utiliser le gzip de GXSecurity plutôt que le vôtre.</p>
+<p><strong>Attention: nettoyage des variables POST</strong></p>
+<p>Certains scripts laissent aux utilisateurs la possibilité d'incorporer du code HTML dans des articles, messages ou signatures, etc...  Si votre script l'impose désactivez le nettoyage POST, sinon il convertira les caractères < > en ;lt ;gt .  Dans le cas contraire activez-le, cela réduira grandement les risques de problèmes de "croisement de sites" (on peut voler vos cookies utilisateurs et autres).</p>
+<p><strong>Attention: CPU LoadMonitor</strong></p>
+<p>Cela peut présenter des inconvénients de s'en tenir à la charge du CPU.  C'est probablement plus sûr de le désactiver. Rien n'assure que le service rendu soit réel, et ca peut ralentir les processus si le CPU doit effectivement exécuter une commande externe...  Utiliser à vos propres risques !</p>
+<br>
+<p><strong><u>Problèmes connus</strong></u></p>
+<p>Pour que l'éditeur interne de CMSimple (OEdit) fonctionne correctement avec GXSecurity, "<strong>session use_trans_sid</strong>" doit être sur "<strong>OFF</strong>" dans PHP.INI ou les variables PHP doivent être modifiables par GXSecurity. Plus d'informations à ce sujet peuvent être trouvées ici: <a href="http://www.php.net/manual/fr/ref.session.php">http://www.php.net/manual/fr/ref.session.php</a>.</p> 
+<p>Des formulaires successifs sont bloqué par checkMultiPost, resp. maxmultiPost doit être assez élevé. Avec checkMultiPost sur OFF les entrées sont encore assez protégées car on teste toujours si il y a trop d'opérations consécutives.</p>
+<br>
+<p><strong><u>Garanties</strong></u></p>
+<p>Il n'y a <strong>pas de garantie</strong> à utiliser ce plugin. Il sera utilisé à vos propres risques. Nous n'assumerons aucune responsabilité en cas de pertes de données causées par GXSecurity.</p>
+<br>
+<p><strong><u>Où trouver GXSecurity ?</strong></u></p>
+<p>La dernière version de GXSecurity peut être <a href="http://xtc.xhonneux.com/?Projekte:GXSecurity:Download">téléchargée ici</a>.</p>
+<br>
+<p><strong><u>Aide et questions</strong></u></p>
+<p>Aide et questions seulement dans le <a href="http://www.cmsimpleforum.com/">forum CMSimple</a> et/ou dans le <a href="http://www.cmsimplewiki.com/">wiki CMSimple</a> svp.</p>
+<br>
+<p><strong><u>Comment améliorer GXSecurity ?</strong></u></p>
+<p>Je ne suis pas un expert en sécurité de sites web ou de code PHP, alors si vous voyez un moyen d'améliorer un aspect de ce plugin alors <a href="http://xtc.xhonneux.com/?Kontakt">contactez moi sur mon site</a>.</p>
+<p>&nbsp;</p>
+<p>© 2007-2014 par Gerd Xhonneux, xtc</p>
+</body>
+</html>

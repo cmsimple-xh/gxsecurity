@@ -1,0 +1,166 @@
+CHANGES:
+========
+
+Legend:
+# -> Bug Fix
++ -> Addition
+^ -> Change
+- -> Removed
+! -> Note
+
+
+Version 1.8:
+------------
+
++ Emanuel Marinello added tooltips to language files for de, en and fr and he made a metaconfig.php
+
+
+Version 1.7:
+------------
+
+# Christoph Becker (cmb) found a Information Exposure Vulnerability in older versions (showlog.php) of GXSecurity and made a bugfix.  
+
+
+Version 1.6:
+------------
+
+^ Emanuel Marinello removed the passing by reference of the two arguments because it looks like they wont be used anyway. (see #EM in index.php)
+^ UTF-8 encoding of language files
+
+
+Version 1.5:
+------------
+
++ Support for UpdateCheck for CMSimple_XH (http://cmsimple.holgerirmler.de/?Plugins:UpdateCheck)
+^ UTF-8 encoding 
+
+
+Version 1.4:
+------------
+
+# Thanks to Markus Vetter a lousy bug (white spaces) in different lang files was removed.
+
+
+Version 1.3 beta 1:
+-------------------
+
+^ Emanuel Marinello changed some code for calling and closing sessions (see #EM in index.php)
++ Wrote some words about multi level forms in the help file
+^ Replaced hard coded waiting time of 60 seconds by variable $plugin_cf['gxsecurity']['waitingtime']
+
+
+Version 1.2:
+------------
+
+- list.dsbl.org removed from the standard configuration because blacklist doesn't exists anymore and caused problems (http://dsbl.org/node/3)
+
+
+Version 1.2 beta 4:
+-------------------
+
+^ renamed $gx_plugin to $gxsecurity_plugin and $gx_pluginfolder to $gxsecurity_pluginfolder 
+
+
+Version 1.2 beta 3:
+-------------------
+
+# $plugin was not declared in admin.php since version 1.2 beta 2
+
+
+Version 1.2 beta 2:
+-------------------
+
+# renamed $plugin to $gx_plugin and $pluginfolder to $gx_pluginfolder (thanks to djot)
+# changed GLOBAL to global (thanks to djot)
+
+
+Version 1.2 beta 1:
+-------------------
+
++ Possibility to check visitors IPs against http:BL from http://www.projecthoneypot.org/
++ Possibility to recheck host to confirm that's really an IP from a robot 
+
+
+Version 1.1:
+------------
+
++ Slovak language (thanks to Tata)
++ Danish language (thanks to Hugo)
+
+Version 1.1 beta 4:
+-------------------
+
+^ DNSBL list is no more hardcoded in function GXBlacklisted() but extracted from config.php
+
+Version 1.1 beta 3:
+-------------------
+
++ Logfiles view now sortable by click on the header
++ New files in ./lib: tablesort.js and tablesort.css
+^ Update of robot.php
+
+Version 1.1 beta 2:
+-------------------
+
++ Logfiles may be viewed in admin section
+^ External code is now in folder ./lib
++ Copyright message when access denied
+
+Version 1.1 beta 1:
+-------------------
+
++ Logfiles daily, monthly or yearly depending on configuration variable.
+
+Version 1.0:
+------------
+
++ Daily logfiles are now created in folder "log" with informations about events.
++ French help file.
++ Netherlands language.
+
+Version 0.1 beta 6:
+-------------------
+
+# Path to .htaccess was not allready correct. 
++ User could define a number of bad attempts before banning the ip in .htaccess or give a message that too many rapid accesses were done.
+
+Version 0.1 beta 5:
+-------------------
+
++ Detect attacks that are attempted using URL cracks and injections (config/cracks.txt).
++ German help file.
+
+Version 0.1 beta 4:
+-------------------
+
+# HTTP_USER_AGENT was not recognized correctly in case of robots.
++ French language.
+
+Version 0.1 beta 3:
+-------------------
+
+# Ob_start() was included in the top of index.php due to some cookie errors when the CMS was not in the base directory of the domain.
++ New field $plugin_tx['gxsecurity']['contact_admin'] to let a message that the user could contact the webmaster for further informations.
+
+Version 0.1 beta 2:
+-------------------
+
+# Check now $_SESSION["gxsec-nocookie"] for a value greater then 2 again before showing the cookie message
++ Messages now in DIV container. Could be formatted by CSS.
+
+Version 0.1 beta 1:
+-------------------
+
+# $_SESSION["gxsec-nocookie"] didn't work with value greater then 0 (was 2 as stand alone script)
++ Check for IPs that are blacklisted and ban them
++ Check for the country where the visitor is from and ban it when in "countries.txt"
++ Messages configurable in different languages
+
+
+Ideas and TO DO:
+================
+
+* Floodcheck with time interval
+* http://michael.langley.id.au/blog/posts/28
+* Value rating for options (see Bobs mail) 
+* Check host when bot (gethost.php)
