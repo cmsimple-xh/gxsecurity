@@ -8,8 +8,7 @@
 //=====================================================================================================================
 #
 #
-# Copyright (C) 2005 by Andreas Müller
-
+# Copyright (C) 2005 by Andreas MÃ¼ller
 class CSVHandler {
 	var $Separator;		//
 	var $DataFile;
@@ -18,13 +17,17 @@ class CSVHandler {
 	var $ItemsList;	//
 	var $Items_Count;
 	var $color;
+    var $whois;
 
 // Standard User functions
 	function CSVHandler($Filename, $Separator, $KeyFieldName) {		//Constructor
+        global $plugin_cf;
 		$this->DataFile=$Filename;
 		$this->DataKey=$KeyFieldName;
 		$this->Separator=$Separator;
 		$this->color="#FFFFFF";
+//        $this->whois='http://who.is/whois-ip/ip-address/';
+        $this->whois=$plugin_cf['gxsecurity']['ShowLog_Whois'];
 	}
 	function ReadCSV() {			//read data into this->ItemsList and return it in an array 
 		$this->Items_Count=0;
@@ -41,158 +44,58 @@ class CSVHandler {
 		}
 		fclose($fp);
 		return ($this->ItemsList);
-	}
-	function Select($needle,$column="all")	{			//get items in a sort of SQL Select query and return them in an array
-		$this->ReadCSV();
-		if($needle=="*") {
-			$result=$this->ItemsList;
-		} else {
-			$result=array();
-			if($column=="all") {
-				while(list($key,$line)=each($this->ItemsList)) {
-     				if (stristr(implode("",$line),$needle)) array_push($result,$line);
-				}
-			} else {
-				while(list($key,$line)=each($this->ItemsList)) {
-     				if (stristr($line[$column],$needle)) array_push($result,$line);
-				}
-			}
-		}
-		return ($result);
-	}
+	}    
+
 	function ListAll() {					//prints a list of all Data
 		$Data=$this->ReadCSV();
 		reset ($this->ItemsList);
 		reset ($this->HeaderData);
 		$HHeaders="";
-		$HData="";
+		$HData="";       
 		while(list($HKey,$HVal)=each($this->HeaderData)) {			//Create Headers Line
-			$HHeaders.=$this->HTTD($HVal);
+			$HHeaders.=$this->HTTH($HVal);
 		}
 		$HHeaders=$this->HTTR($HHeaders);
+		$HHeaders=$this->HTTHead($HHeaders);
 		while(list($LineKey,$LineVal)=each($this->ItemsList)) {	//Read Data Lines
 			$HDataLine="";
 			while(list($DataKey,$DataVal)=each($LineVal)) {			//Dissect one Data Line
+                if ($DataKey==='IP') $DataVal = $this->whois($DataVal);
 				$HDataLine.=$this->HTTD($DataVal);
 			}
 			$HData.=$this->HTTR($HDataLine);	//and add HTML to Data
 		}
+		$HData=$this->HTTBody($HData);
 		print ($this->HTPage($this->HTTable($HHeaders.$HData)));
-	}
-	function GetValues($field) {		//Fetch all values of a specified field and return values in array
-		$Data=$this->ReadCSV();
-		$values=array();
-		while(list($key,$val)=each($this->ItemsList)) {
-    		if(!in_array($val[$field],$values)) array_push($values,$val[$field]);
-		}
-		sort($values);
-		return $values;
-	}
-	function Edit() {						//All edit function in one Table
-		$Data=$this->ReadCSV();
-		if(isset($_POST['commit'])) {
-			$this->Update($_POST[$this->DataKey],$_POST);
-			$Data=$this->ReadCSV();
-		}	
-		if(isset($_POST['add'])) {
-			$this->Add($_POST[$this->DataKey],$_POST);
-			$Data=$this->ReadCSV();
-		}	
-		if(isset($_POST['delete'])) {
-			$this->Delete($_POST[$this->DataKey]);
-			$Data=$this->ReadCSV();
-		}	
-		$PAGE=$this->EditList();
-		print $PAGE;	
-	}
-	
-//	Administration Area
-	function Update($key,$data) {		//Updating Item "key" with "data" named array
-		$this->ReadCSV();
-		for($i=0;$i<count($this->ItemsList);$i++) {
-			If($this->ItemsList[$i][$this->DataKey]==$key){
-				while(list($key,$val)=each($this->HeaderData)) {
-					if(isset($data[$val])) $this->ItemsList[$i][$val]=$data[$val];
-				}
-			}	
-		}
-		$this->WriteData();
-		return($this->ItemsList);
-	}
-	function Add($key,$data) {			//add an Item "key" with "data" named array
-		$this->ReadCSV();
-		$NewLine=array();
-		$NewItem=array($this->DataKey=>$key);
-		while(list($key,$val)=each($this->HeaderData)) {
-			if(isset($data[$val])) {
-				$NewItem[$val]=$data[$val];
-			} else {
-				$NewItem[$val]=$data[$val]="";
-			}
-		}
-		array_push($this->ItemsList,$NewItem);
-		$this->WriteData();
-		return($this->ItemsList);
-	}
-	function EditList() {		//returns Editor's List of Items
-		reset ($this->ItemsList);
-		reset ($this->HeaderData);
-		$HHeaders=$this->HTTD(" ");
-		$HData="";
-		while(list($HKey,$HVal)=each($this->HeaderData)) {			//Create Headers Line
-			$HHeaders.=$this->HTTD($HVal);
-		}
-		$HHeaders=$this->HTTR($HHeaders);
-		while(list($LineKey,$LineVal)=each($this->ItemsList)) {	//Read Data Lines
-			$HDataLine="";
-			while(list($DataKey,$DataVal)=each($LineVal)) {			//Dissect one Data Line
-				$HDataLine.=$this->HTInput($DataKey,$DataVal);
-			}
-			$HData.=$this->HTForm($LineVal[$this->DataKey],$this->HTTR($this->HTButton("commit").$HDataLine.$this->HTButton("delete")));	//and add HTML to Data
-		}
-		$HDataLine="";
-		reset($this->HeaderData);
-		while(list($DataKey,$DataVal)=each($this->HeaderData)) {			// Add an extra Line for Adding a record
-			$HDataLine.=$this->HTInput($DataVal,"");
-		}
-		$HData.=$this->HTForm($LineVal[$this->DataKey],$this->HTTR($this->HTButton("add").$HDataLine));	//and add HTML to Data
-		return($this->HTPage($this->HTTable($HHeaders.$HData)));
-	}
-	function Delete($DeleteKey) {		//Remove Item "Key" from the file
-		$inter=array();
-		while(list($key,$val)=each($this->ItemsList)) {
-			If($val[$this->DataKey]!=$DeleteKey)	array_push($inter,$val);
-		}
-		$this->ItemsList=$inter;
-		$this->WriteData();
-		return($this->ItemsList);
-	}
-	function WriteData() {		//writing contents of ItemList to Datafile
-		reset($this->ItemsList);
-		$Output=implode($this->Separator, $this->HeaderData)."\n";
-		while(list($key,$val)=each($this->ItemsList)) {
-			for($i=0;$i<count($this->HeaderData);$i++){
-				$writekey=$this->HeaderData[$i];
-				$writeitem[$writekey]=$val[$writekey];
-			}
-			$Output.=implode($this->Separator, $writeitem)."\n";
-		}
-		$fp = fopen ($this->DataFile,"w");
-		flock($fp,2);
-		fputs($fp,$Output);
-		flock($fp,3);
-		fclose($fp);
 	}
 
 //	Accessory HTML output functions
 	function HTPage($value) {	// Places $value into BODY of HTML Page
+    		global $pth,$hjs;
+	    if(!file_exists($pth['folder']['plugins'].'jquery/jquery.inc.php')) 
+		    return '<div class="cmsimplecore_warning">'.
+		    '<b>Ups!</b>'.tag('br').
+		    'Plugin '.ucfirst(basename(dirname(__FILE__))).
+		    ' requires jQuery4CMSimple - Plugin!'.tag('br').
+		    'Please download and install jQuery4CMSimple'.tag('br').
+		    'from <a href='.
+		    '"http://www.cmsimple-xh.org/wiki/doku.php/extend:jquery4cmsimple">'.
+		    ' www.cmsimple-xh.org/wiki</a>.'.
+		    '</div>';
+
+	    include_once($pth['folder']['plugins'].'jquery/jquery.inc.php'); //include jQuery to the <head>
+	    include_jQuery();    
+	    include_jQueryPlugin('tablesorter',$pth['folder']['plugins'].'gxsecurity/lib/jquery.tablesorter.min.js');
+	    include_jQueryPlugin('gxsecurity',$pth['folder']['plugins'].'gxsecurity/lib/jquery.gxsecurity.js');
+		
+	    
 		$result = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
 		$result.="<html><head><title>".$this->DataFile." Editor</title>\n";
 		$result.="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n";
-		$result.="<link rel=\"stylesheet\" href=\"./lib/tablesort.css\" type=\"text/css\">";
-		$result.="<script type=\"text/javascript\" src=\"./lib/tablesort.js\"></script>\n";
+		$result.="<link rel=\"stylesheet\" href=\"./plugins/gxsecurity/lib/tablesort.css\" type=\"text/css\">";
+		$result.=$hjs;
 		$result.="</head>\n";
-		$result.="<body onload=\"init();\">\n".$value."</body>\n</html>";
+		$result.="<body>\n".$value."</body>\n</html>";
 		return $result;
 	}
 	function HTForm($item,$data) {	//places $data into form $item
@@ -201,12 +104,23 @@ class CSVHandler {
 	function HTTable($value) {		//places $value into TABLE
 		return "<table  border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n".$value."</table>\n";
 	}
+	function HTTHead($value) {			//places $value into THEAD
+		return "<thead>".$value."</thead>\n";
+	}
+	function HTTBody($value) {			//places $value into TBODY
+		return "<tbody>".$value."</tbody>\n";
+	}
 	function HTTR($value) {			//places $value into TR
-		$this->SRotate();
 		return "<tr>".$value."</tr>\n";
+	}
+	function HTTH($value) {			//places $value into TH
+		return "<th class=\"header\">".$value."</th>\n";
 	}
 	function HTTD($value) {	// places $value into TD
 		return "<td>".$value."</td>";
+	}
+	function whois($value) {	// generates a who.is link with ip address
+		return '<a href="'.sprintf($this->whois,$value).'" target="whois">'.$value.'</a>';
 	}
 	function HTInput($field,$value) {	//returns TD input field
 		$Olen=strlen($value);

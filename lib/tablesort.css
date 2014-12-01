@@ -4,11 +4,31 @@ body {
 table {
 	font-family:verdana;
 	font-size:9pt;
+  border-collapse:collapse;
 	border:1px solid #000000;
 	cursor:default;
 	color:#FFFFFF;
 }
-
-td {
+table a {color:inherit;text-decoration:none;}
+th {color:black;background:#FFFFFF;cursor:pointer;border:1px solid #000000;
+}
+tbody tr:nth-child(even) {background:#006699;}
+tbody tr:nth-child(odd) {background:#00968C;}
+th,td {
 	padding:5px;
+  text-align:left;
+}
+th {padding-right:20px;}
+
+table .header {
+    background: url("images/ascdesc.gif") no-repeat right center;
+    cursor: pointer;
+}
+table  .headerSortDown {
+    background: url("images/asc.gif") no-repeat right center;
+    cursor: pointer;
+}
+table  .headerSortUp {
+    background: url("images/desc.gif") no-repeat right center;
+    cursor: pointer;
 }
