@@ -1,0 +1,6 @@
+* text=auto
+
+# just in case such files will be added to the repository
+*.png binary
+*.jpg binary
+*.gif binary
