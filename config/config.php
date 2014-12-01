@@ -28,4 +28,5 @@
 	$plugin_cf['gxsecurity']['checkbothost']=0;	
 	$plugin_cf['gxsecurity']['hostchecktype']=1;	
 	$plugin_cf['gxsecurity']['waitingtime']=60;	
+	$plugin_cf['gxsecurity']['ShowLog_Whois']='https://stat.ripe.net/%s';	
 ?>
