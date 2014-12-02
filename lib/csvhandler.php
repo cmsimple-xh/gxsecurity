@@ -8,7 +8,7 @@
 //=====================================================================================================================
 #
 #
-# Copyright (C) 2005 by Andreas MÃ¼ller
+# Copyright (C) 2005 by Andreas Müller
 class CSVHandler {
 	var $Separator;		//
 	var $DataFile;
