@@ -1,14 +1,17 @@
 <?php
+/*
+ * Register the plugin menu items.
+ */
+    if (function_exists('XH_registerStandardPluginMenuItems')) {
+        XH_registerStandardPluginMenuItems(true);
+    }
 
-if(isset($gxsecurity)) {
+if(function_exists('XH_wantsPluginAdministration') 
+    && XH_wantsPluginAdministration('gxsecurity') 
+    || isset($gxsecurity) && $gxsecurity == 'true') 
+{
 
- global $pth, $sl, $plugin;
- $admin= isset($_POST['admin']) ? $_POST['admin'] : $_GET['admin'];
- $action= isset($_POST['action']) ? $_POST['action'] : $_GET['action'];
- 
- //$plugin=basename(dirname(__FILE__),"/");
  $gxsecurity_plugin=basename(dirname(__FILE__),"/");
- 
 
  $o.=print_plugin_admin('on');
  if($admin<>'plugin_main'){$o.=plugin_admin_common($action,$admin,$gxsecurity_plugin);}
@@ -58,13 +61,13 @@ if(isset($gxsecurity)) {
 /*
  * Show a log file.
  */
-if ($adm && $_POST['csvfile']) {
+if ($adm && !empty($_POST['csvfile'])) {
  include($pth['folder']['plugin']."lib/csvhandler.php");
  $csvfile=$pth['folder']['plugin']."log/".$_POST['csvfile'].'.csv';
- echo "<strong>".$csvfile."</strong>";
+ echo '<a href="'.$csvfile.'"><strong>'.$csvfile.'</strong></a>';
+
  $data=new CSVHandler($csvfile,$_POST['delimiter'],"");
  $data->ListAll();
  exit;
 }
-
 ?>
